@@ -424,6 +424,63 @@
         database.ref('records/' + rowIndex).set({ status: newStatus });
     }
 </script>
+
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDBHRLu_F4uH6Jp9FCPEcrfoKA9uItESD4",
+        authDomain: "collection-sorter.firebaseapp.com",
+        databaseURL: "https://collection-sorter-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "collection-sorter",
+        storageBucket: "collection-sorter.firebasestorage.app",
+        messagingSenderId: "102433980397",
+        appId: "1:102433980397:web:86e118cfdb44fdfb5e71e4",
+        measurementId: "G-K6EZQNEX61"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Ensure proper initialization
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('#collectionTable tbody tr');
+        rows.forEach((row, index) => {
+            const statusCell = row.querySelector('td:nth-last-child(1) button');
+            const ref = database.ref('records/' + index);
+
+            // Sync changes from Firebase
+            ref.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    statusCell.textContent = data.status;
+                    statusCell.style.backgroundColor = data.status === "Simon" ? "blue" : "red";
+                    statusCell.style.color = "white";
+                }
+            });
+        });
+    });
+
+    // Function to toggle status
+    function toggleStatus(button, rowIndex) {
+        if (!database) {
+            console.error("Database is not initialized");
+            return;
+        }
+        const currentStatus = button.textContent;
+        const newStatus = currentStatus === "Simon" ? "Lewis" : "Simon";
+
+        // Update display
+        button.textContent = newStatus;
+        button.style.backgroundColor = newStatus === "Simon" ? "blue" : "red";
+        button.style.color = "white";
+
+        // Save update to Firebase
+        database.ref('records/' + rowIndex).set({ status: newStatus });
+    }
+</script>
 </head>
 <body>
     <h1>Bademeister x Disko Stu Collection</h1>
