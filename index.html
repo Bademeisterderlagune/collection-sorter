@@ -352,6 +352,9 @@
                     statusCell.textContent = data.status;
                     statusCell.style.backgroundColor = data.status === "Simon" ? "blue" : "red";
                     statusCell.style.color = "white";
+                } else {
+                    statusCell.textContent = "Loading...";
+                    statusCell.style.backgroundColor = "gray";
                 }
             });
         });
@@ -359,16 +362,21 @@
 
     // Function to toggle status and save to Firebase
     function toggleStatus(button, rowIndex) {
-        const currentStatus = button.textContent;
-        const newStatus = currentStatus === "Simon" ? "Lewis" : "Simon";
+        const ref = database.ref('records/' + rowIndex);
+        ref.once('value', (snapshot) => {
+            const currentStatus = snapshot.val()?.status || "Simon";
+            const newStatus = currentStatus === "Simon" ? "Lewis" : "Simon";
 
-        // Update display
-        button.textContent = newStatus;
-        button.style.backgroundColor = newStatus === "Simon" ? "blue" : "red";
-        button.style.color = "white";
+            // Update display
+            button.textContent = newStatus;
+            button.style.backgroundColor = newStatus === "Simon" ? "blue" : "red";
+            button.style.color = "white";
 
-        // Save the update to Firebase
-        database.ref('records/' + rowIndex).set({ status: newStatus });
+            // Save the update to Firebase
+            ref.set({ status: newStatus })
+                .then(() => console.log(`Row ${rowIndex} updated to ${newStatus}`))
+                .catch((error) => console.error(`Error updating Row ${rowIndex}:`, error));
+        });
     }
 </script>
 </head>
