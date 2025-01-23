@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Test - Corrected</title>
+    <title>Firebase Clean Test</title>
+    <!-- Using only the compat versions of Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <script>
-        // Firebase configuration
+        // Firebase configuration (defined only once)
         const firebaseConfig = {
             apiKey: "AIzaSyDBHRLu_F4uH6Jp9FCPEcrfoKA9uItESD4",
             authDomain: "collection-sorter.firebaseapp.com",
@@ -20,7 +21,7 @@
             measurementId: "G-K6EZQNEX61"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase only once
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -54,7 +55,7 @@
     </script>
 </head>
 <body>
-    <h1>Firebase Minimal Test (Corrected)</h1>
+    <h1>Firebase Clean Test</h1>
     <p id="status-display">Loading...</p>
     <button id="toggle-button">Toggle Status</button>
 </body>
